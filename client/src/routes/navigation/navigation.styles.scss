@@ -1,0 +1,16 @@
+#navbar {
+
+    ul {
+        display:flex;
+        justify-content: center;
+        gap:5%;
+        list-style: none;
+        font-style: none;
+        li {
+            a {
+            text-decoration: none;
+            color:black;
+        }
+        }
+    }
+}
