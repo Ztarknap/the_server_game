@@ -8,6 +8,7 @@ export const Navigation = () => {
             <ul>
                 <li><Link to='home'> Home</Link></li>
                 <li><Link to='play'> Play</Link></li>
+                <li><Link to='cards'> Cards</Link></li>
             </ul>
             <Outlet/>
         </div>

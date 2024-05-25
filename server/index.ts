@@ -1,5 +1,6 @@
 const express = require('express');
-const cardRoute = require('./routes/cards.ts');
+const cardRoute = require('./api/rest_api/routes/cards')
+const {playStartEventHandler, getCardsEventHandler} = require('./api/ws_api/play-event-handlers');
 const http = require("http");
 const WebSocket = require("ws");
 const app = express();
@@ -10,11 +11,27 @@ app.use('/api/cards',cardRoute);
 const server = http.createServer(app);
 const webSocketServer = new WebSocket.Server({server});
 
+const routeEvent = (message:any) => {
+    const obj = JSON.parse(message);
+    switch(obj.event) {
+        case 'play-start':
+            playStartEventHandler(obj);
+            break;
+        case 'get-cards':
+            getCardsEventHandler();
+            break;
+        default:
+            console.log('default');
+            break;
+            
+    }
+}
 
 webSocketServer.on('connection', (ws:any) => {
     ws.on('message', (m:any) => {
-        console.log(m);
- webSocketServer.clients.forEach((client:any) => client.send(m));
+        console.log(m.toString());
+        routeEvent(m);
+        webSocketServer.clients.forEach((client:any) => client.send(m));
     });
  
     ws.on("error", (e:any) => ws.send(e));
