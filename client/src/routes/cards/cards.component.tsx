@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { CardDetailed } from "../../components/card-detailed/card-detailed.component";
+import './cards.styles.scss'
 
 const getCardsREST = async() => {
     const res = await fetch(
@@ -16,7 +18,6 @@ export const Cards = () => {
     const [cardsObj, setCardsObj] = useState([]);
     const getCards = async() => {
         const data = await getCardsREST();
-        console.log(data);
         setCardsObj(data);
     }
     
@@ -25,9 +26,9 @@ export const Cards = () => {
     }, [])
     
     return (
-        <div>
+        <div className="cards-list">
         {cardsObj.map((card:any) => {
-            return card;
+            return <CardDetailed {...card}/>
         })}
         </div>
     )

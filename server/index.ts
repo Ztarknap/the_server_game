@@ -4,9 +4,8 @@ const {playStartEventHandler, getCardsEventHandler} = require('./api/ws_api/play
 const http = require("http");
 const WebSocket = require("ws");
 const app = express();
-app.use(express.urlencoded({extended: true}));
-app.use(express.json({extended: true}));
-app.use('/api/cards',cardRoute);
+
+ 
 
 const server = http.createServer(app);
 const webSocketServer = new WebSocket.Server({server});
@@ -39,12 +38,18 @@ webSocketServer.on('connection', (ws:any) => {
     ws.send('websock answer');
  });
 
+ app.use(express.urlencoded({extended: true}));
+ app.use(express.json({extended: true}));
 
+ app.use(express.static('./public'));
+ //app.use(express.static(__dirname+'/public'));
+ app.use('/api/cards',cardRoute);
+
+ 
 server.listen(3001, ()=> console.log("Server on"));
 /*app.listen(3001, ()=> {
     console.log('listening on port 3001');
 })*/
 
 
-
-console.log('aaaa');
+ 
