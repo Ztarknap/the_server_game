@@ -1,6 +1,6 @@
 const express = require('express');
 const cardRoute = require('./api/rest_api/routes/cards')
-const {playStartEventHandler, getCardsEventHandler} = require('./api/ws_api/play-event-handlers');
+const {playStartEventHandler, getCardsEventHandler,loginEventHandler} = require('./api/ws_api/play-event-handlers');
 const http = require("http");
 const WebSocket = require("ws");
 const app = express();
@@ -18,6 +18,9 @@ const routeEvent = (message:any) => {
             break;
         case 'get-cards':
             getCardsEventHandler();
+            break;
+        case 'login':
+            loginEventHandler(obj);
             break;
         default:
             console.log('default');
