@@ -1,5 +1,5 @@
 const cardsConst = require('../../const_obj/cardsConst.ts');
-const loginUser = require('./auth.ts');
+const {loginUser} = require('./auth.ts');
 
 const playStartEventHandler = (obj:any) => {
     console.log(obj);

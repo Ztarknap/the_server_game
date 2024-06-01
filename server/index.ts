@@ -1,16 +1,40 @@
 const express = require('express');
 const cardRoute = require('./api/rest_api/routes/cards')
+import {clientInfo} from './utils/ts_types'
+const uuid = require('uuid');
 const {playStartEventHandler, getCardsEventHandler,loginEventHandler} = require('./api/ws_api/play-event-handlers');
 const http = require("http");
 const WebSocket = require("ws");
 const app = express();
-
+let CLIENTS:clientInfo[] = [];
  
 
 const server = http.createServer(app);
 const webSocketServer = new WebSocket.Server({server});
 
-const routeEvent = (message:any) => {
+const getClientfromList = (connectionId:string) =>
+{
+    for (let i=0; i< CLIENTS.length; i++) {
+        if (CLIENTS[i].id = connectionId) {
+            return CLIENTS[i];
+        }
+    }
+
+}
+
+const setClientfromList = (connectionId:string, userName:string) =>
+{
+    for (let i=0; i< CLIENTS.length; i++) {
+        if (CLIENTS[i].id = connectionId) {
+            CLIENTS[i].user = userName;
+        }
+    }
+
+}
+
+
+
+const routeEvent = (message:any, connectionId:string) => {
     const obj = JSON.parse(message);
     switch(obj.event) {
         case 'play-start':
@@ -21,6 +45,8 @@ const routeEvent = (message:any) => {
             break;
         case 'login':
             loginEventHandler(obj);
+            let t = obj.payload;
+            setClientfromList(connectionId, obj.payload.userName)
             break;
         default:
             console.log('default');
@@ -30,15 +56,18 @@ const routeEvent = (message:any) => {
 }
 
 webSocketServer.on('connection', (ws:any) => {
+    const curId = uuid.v4();
+    ws.id = curId;
+    CLIENTS.push({"id":curId, "user":null})
     ws.on('message', (m:any) => {
-        console.log(m.toString());
-        routeEvent(m);
+        routeEvent(m, ws.id);
         webSocketServer.clients.forEach((client:any) => client.send(m));
     });
  
     ws.on("error", (e:any) => ws.send(e));
  
     ws.send('websock answer');
+    console.log(CLIENTS);
  });
 
  app.use(express.urlencoded({extended: true}));

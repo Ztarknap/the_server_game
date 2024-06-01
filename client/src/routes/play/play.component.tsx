@@ -11,14 +11,13 @@ const appendLogs = (prevLogs:string, newLog:string) => {
 
 
 export const Play = () => {
-    wsSend(playStartEvent("test"));
+    //wsSend(playStartEvent("test"));
     const [logs, logsSet] = useState('');
 
 
     return(
        
             <div className='play-block'>
-
            <div> <textarea id="logs_box" value={logs}/></div>
            <SignIn></SignIn>
             </div>
