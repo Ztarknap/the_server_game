@@ -1,9 +1,10 @@
 export const wsConnection = new WebSocket("ws://localhost:3001");
-wsConnection.onopen = function() {
+ 
+wsConnection.onopen = () => {
     console.log("Connection established.");
 };
 
-wsConnection.onclose = function(event) {
+wsConnection.onclose = (event) => {
     if (event.wasClean) {
         console.log('Con clean end');
     } else {
@@ -12,11 +13,11 @@ wsConnection.onclose = function(event) {
     console.log('Code: ' + event.code + ' reason: ' + event.reason);
 };
 
-wsConnection.onerror = function(error:any) {
+wsConnection.onerror = (error:any) => {
     console.log("Error " + error.message);
 };
 
-export const wsSend = function(data:any) {
+export const wsSend = (data:any) => {
     if(!wsConnection.readyState){
         setTimeout(function (){
             wsSend(data);

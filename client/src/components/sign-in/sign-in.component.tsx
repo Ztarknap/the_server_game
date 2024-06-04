@@ -8,10 +8,27 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { signIn, signOut, updateUserList } from "../../redux/slices";
+import { useDispatch, useSelector } from "react-redux";
+import { wsConnection } from '../../ws_utils/ws-play-connection';
 
+ 
+
+ 
 export const SignIn = () => {
     const [openSign, setOpenSign] = useState(false);
+    const dispatch = useDispatch();
+    const users = useSelector((state:any) =>  {return state.users});
+
+
+    wsConnection.onmessage =  (msg: any) => {
+      const msgJSON = JSON.parse(msg['data']);
+      dispatch(signIn({name: msgJSON.payload.userName, players: msgJSON.payload.clients}));
+       
+    }
+
     
+
     const handleClickOpenSign = () => {
         setOpenSign(true);
     };

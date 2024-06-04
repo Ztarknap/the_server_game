@@ -4,7 +4,6 @@ import './card-detailed.styles.scss'
 import { useState } from "react";
 
 export const CardDetailed = (card:CardDetailedType) => {
-    console.log(card);
 
     let card_description = 'Just a plain card!';
     return (

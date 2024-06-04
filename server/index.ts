@@ -34,7 +34,7 @@ const setClientfromList = (connectionId:string, userName:string) =>
 
 
 
-const routeEvent = (message:any, connectionId:string) => {
+const routeEvent = (message:any, ws:any) => {
     const obj = JSON.parse(message);
     switch(obj.event) {
         case 'play-start':
@@ -45,8 +45,9 @@ const routeEvent = (message:any, connectionId:string) => {
             break;
         case 'login':
             loginEventHandler(obj);
-            let t = obj.payload;
-            setClientfromList(connectionId, obj.payload.userName)
+            setClientfromList(ws.id, obj.payload.userName)
+            ws.send(JSON.stringify({event:"login", payload: {userName: obj.payload.userName, clients: CLIENTS, status: 0, msg: 'Success'}}))
+            //send - itsok
             break;
         default:
             console.log('default');
@@ -60,14 +61,13 @@ webSocketServer.on('connection', (ws:any) => {
     ws.id = curId;
     CLIENTS.push({"id":curId, "user":null})
     ws.on('message', (m:any) => {
-        routeEvent(m, ws.id);
-        webSocketServer.clients.forEach((client:any) => client.send(m));
+        routeEvent(m, ws);
+        //webSocketServer.clients.forEach((client:any) => client.send(m));
     });
  
     ws.on("error", (e:any) => ws.send(e));
  
-    ws.send('websock answer');
-    console.log(CLIENTS);
+     
  });
 
  app.use(express.urlencoded({extended: true}));
