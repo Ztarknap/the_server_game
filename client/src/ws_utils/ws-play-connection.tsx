@@ -1,5 +1,9 @@
-export const wsConnection = new WebSocket("ws://localhost:3001");
  
+import { signIn, receiveInvite } from "../redux/slices";
+
+export const wsConnection = new WebSocket("ws://localhost:3001");
+  
+
 wsConnection.onopen = () => {
     console.log("Connection established.");
 };
@@ -13,10 +17,7 @@ wsConnection.onclose = (event) => {
     console.log('Code: ' + event.code + ' reason: ' + event.reason);
 };
 
-wsConnection.onerror = (error:any) => {
-    console.log("Error " + error.message);
-};
-
+ 
 export const wsSend = (data:any) => {
     if(!wsConnection.readyState){
         setTimeout(function (){
@@ -26,3 +27,4 @@ export const wsSend = (data:any) => {
         wsConnection.send(data);
     }
 };
+ 

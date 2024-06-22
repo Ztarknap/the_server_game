@@ -15,4 +15,9 @@ const loginEventHandler = (obj:any) => {
     return JSON.stringify({event:"login", payload: {msg: loginResult}});
 }
 
-module.exports = {playStartEventHandler, getCardsEventHandler,loginEventHandler};
+const inviteEventHandler = (obj:any) => {
+    console.log('inviteventhandler ',obj);
+    return JSON.stringify({event: "invite", payload: {msg: 'tt'}})
+}
+
+module.exports = {playStartEventHandler, getCardsEventHandler,loginEventHandler, inviteEventHandler};

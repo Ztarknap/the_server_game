@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom"
 import {Link} from 'react-router-dom'
 import './navigation.styles.scss'
+import {useSelector } from "react-redux";
 
 export const Navigation = () => {
     return(

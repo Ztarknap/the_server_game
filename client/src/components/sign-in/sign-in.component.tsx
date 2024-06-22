@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { useState } from 'react';
-import {wsSend} from '../../ws_utils/ws-play-connection';
+import { wsSend } from '../../ws_utils/ws-play-connection';
 import { loginEvent } from '../../ws_utils/ws_api/build-event';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -10,22 +10,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { signIn, signOut, updateUserList } from "../../redux/slices";
 import { useDispatch, useSelector } from "react-redux";
-import { wsConnection } from '../../ws_utils/ws-play-connection';
+
 
  
 
  
 export const SignIn = () => {
-    const [openSign, setOpenSign] = useState(false);
-    const dispatch = useDispatch();
+    const [openSign, setOpenSign] = useState(false); 
     const users = useSelector((state:any) =>  {return state.users});
-
-
-    wsConnection.onmessage =  (msg: any) => {
-      const msgJSON = JSON.parse(msg['data']);
-      dispatch(signIn({name: msgJSON.payload.userName, players: msgJSON.payload.clients}));
-       
-    }
 
     
 
@@ -36,6 +28,7 @@ export const SignIn = () => {
     const handleCloseSign = () => {
         setOpenSign(false);
     };
+ 
     return(
         <div>
               <Button id="playButton" variant="contained" color='secondary' onClick={() => {handleClickOpenSign()}}> Play</Button>

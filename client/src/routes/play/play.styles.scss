@@ -1,4 +1,13 @@
 .play-block {
     display:flex;
-    
+    justify-content:center;
+    align-items:center;
+    #logs_box{
+        width: 50%;
+        max-width: 10%;
+        position: absolute;
+        left: 1%;
+        bottom: 1%;
+        height: 30%;
+    }
 }
