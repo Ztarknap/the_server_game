@@ -4,7 +4,6 @@ const cardsConst = require('../../../const_obj/cardsConst.ts');
 
 
 router.get('/', async (req:any, res:any) => {
-    console.log(cardsConst);
     res.send(cardsConst);
 })
 

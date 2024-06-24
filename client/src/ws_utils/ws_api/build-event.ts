@@ -6,8 +6,8 @@ export const loginEvent = (name: string) => {
     return JSON.stringify({event:"login", payload: {userName: name}});
 }
 
-export const inviteEvent = (id: string, opponentId: string) => {
-    return JSON.stringify({event: "invite", payload: {id: id, opponentId: opponentId}});
+export const inviteEvent = (opponentId: string) => {
+    return JSON.stringify({event: "invite", payload: { opponentId: opponentId}});
 }
 
 export const refreshPlayersEvent = (id: string) => {

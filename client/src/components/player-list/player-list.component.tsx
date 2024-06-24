@@ -8,11 +8,9 @@ import { useSelector } from 'react-redux';
  
 
 export const PlayerList = (user:any) => {
-    console.log('dfsdf', user);
     const users = useSelector((state:any) =>  {return state.users}); 
     const handleGameInvite = (event:any, opponentId: string) => {
-        console.log(event, ' aaa '); 
-        wsSend(inviteEvent(users.id, opponentId));
+        wsSend(inviteEvent(opponentId));
         
     }
     return (

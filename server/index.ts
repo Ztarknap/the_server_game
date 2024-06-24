@@ -44,8 +44,8 @@ const delClientFromList = (connectionId:string) =>
 
 
 
-const routeEvent = (obj:any, ws:any) => {
-    console.log('aliiivecounter', ws.aliveCounter);
+const routeEvent = (message:any, ws:any) => {
+    const obj = JSON.parse(message);
     if (ws.aliveCounter <3) {
         ws.aliveCounter++;
     }
@@ -72,19 +72,25 @@ const routeEvent = (obj:any, ws:any) => {
             let wsClients = webSocketServer.clients;
             let targetClient:any;
             for (let client of wsClients) {
-                if (client.id == obj.payload.id) {
+                if (client.id == obj.payload.opponentId) {
                     targetClient = client;
-                    break;
                 }
             }
+            
             //is not a function
             //let targetWebSocketServer = wsClients.find((wss: any) => wss.value.id = obj.payload.id);
-            console.log('aa');
-            targetClient.send(inviteEventHandler(obj));
+             
+            //refractor!!!
+            const opponentObj = getClientfromList(targetClient.id);
+            if (opponentObj) {            
+                let t = inviteEventHandler({opponentName: opponentObj.user, opponentId: targetClient.id});
+                targetClient.send(JSON.stringify({event: obj.event, payload: {opponentName: opponentObj.user, opponentId: targetClient.id, status: 0, msg: 'Success'}}));
+            }
+            break;
         }
-            //ws.send(inviteEventHandler(obj));
+             
         case 'refreshInvite': {
-            ws.send(JSON.stringify({event: obj.event, payload: {id: ws.id, clients: CLIENTS, status: 0, msg: 'Success'}}))
+            ws.send(JSON.stringify({event: obj.event, payload: {id: ws.id, clients: CLIENTS, status: 0, msg: 'Success'}}));
             break;
         }
             
@@ -104,7 +110,6 @@ webSocketServer.on('connection', (ws:any) => {
     console.log('new client!');
     console.log(CLIENTS);
     const keepAlive = setInterval(() => {
-        console.log('interval fire');
         ws.aliveCounter--;
         console.log(ws.aliveCounter);
         if(ws.aliveCounter <0) {
@@ -113,12 +118,11 @@ webSocketServer.on('connection', (ws:any) => {
             console.log('terminated', CLIENTS);
             clearInterval(keepAlive);
             return;
+ 
         }
-        console.log('seeending');
         ws.send(JSON.stringify({event: 'keepAlive', payload: {status: 0, msg: 'Success'}}));
-    }, 5000)
+    }, 10000)
     ws.on('message', (m:any) => {
-        console.log('gotmsg');
         routeEvent(m, ws);
         //webSocketServer.clients.forEach((client:any) => client.send(m));
     });

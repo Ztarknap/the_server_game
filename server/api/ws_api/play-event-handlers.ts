@@ -2,7 +2,6 @@ const cardsConst = require('../../const_obj/cardsConst.ts');
 const {loginUser} = require('./auth.ts');
 
 const playStartEventHandler = (obj:any) => {
-    console.log(obj);
     return JSON.stringify({event:"play-start", payload: {userName: "aaa"}});
 }
 
@@ -17,7 +16,7 @@ const loginEventHandler = (obj:any) => {
 
 const inviteEventHandler = (obj:any) => {
     console.log('inviteventhandler ',obj);
-    return JSON.stringify({event: "invite", payload: {msg: 'tt'}})
+    return JSON.stringify({event: "invite", payload: {opponentName: obj.opponentName, opponentId: obj.opponentId}})
 }
 
 module.exports = {playStartEventHandler, getCardsEventHandler,loginEventHandler, inviteEventHandler};

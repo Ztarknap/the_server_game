@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { SignIn } from '../../components/sign-in/sign-in.component';
 import { PlayerList } from '../../components/player-list/player-list.component';
 import {Invite} from '../../components/invite/invite.component'
+import { PlayField } from '../../components/play-field/game-field.component';
 import { signIn, receiveInvite, updateUserList } from "../../redux/slices"
 import { useDispatch, useSelector } from "react-redux";
 import useWebSocket, {ReadyState} from 'react-use-websocket';
@@ -30,7 +31,6 @@ export const Play = () => {
     };
     wsConnection.onmessage =  (msg: any) => {
         const msgJSON = JSON.parse(msg['data']);
-        console.log('msg ', msg);
         if (msgJSON.payload.status == 0) {
             switch(msgJSON.event) {
                 case 'login': {
@@ -65,13 +65,16 @@ export const Play = () => {
     const handleInviteRefresh = () => {
         wsSend(refreshPlayersEvent(users.id));
     }
+        const handleAccept = (event:any) => {
+        console.log('accept')
+    }
     //{ isShown: false, opponentName: null, opponentId: null},
     return(
          
             <div className='play-block'>
            <div> <textarea id="logs_box" value={logs}/></div>
            <div id='sign-in-btn'>{users.id?"":<SignIn></SignIn>}</div>
-           <div> {users.id? <Button id="invite-refresh-btn" variant="contained" color='secondary' onClick={() => {handleInviteRefresh()}}> Refresh player list</Button>:""}</div>
+           <div> {users.id? <Button id="invite-refresh-btn" variant="contained" color='secondary' onClick={handleInviteRefresh}> Refresh player list</Button>:""}</div>
            <div id='invite-popup'>{invite.isShown?<Invite></Invite>:""}</div>
            {users.id?<PlayerList {...users}></PlayerList>:""}
             </div>
