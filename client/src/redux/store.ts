@@ -1,12 +1,12 @@
 import { configureStore, Tuple} from '@reduxjs/toolkit';
-import {userReducer, inviteReducer} from './slices';
-//import { wsMiddleware } from '../middleware/middleware';
- 
+import {userReducer, inviteReducer, playSessionReducer} from './slices';
+
 
 export default configureStore({
     reducer: {
         users: userReducer,
-        invite: inviteReducer
+        invite: inviteReducer,
+        playSession: playSessionReducer
     },
-    //middleware: () => {return new Tuple(wsMiddleware(new WebSocket("ws://localhost:3001")))},
+     
 })

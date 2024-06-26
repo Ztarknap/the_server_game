@@ -83,7 +83,6 @@ const routeEvent = (message:any, ws:any) => {
             //refractor!!!
             const opponentObj = getClientfromList(targetClient.id);
             if (opponentObj) {            
-                let t = inviteEventHandler({opponentName: opponentObj.user, opponentId: targetClient.id});
                 targetClient.send(JSON.stringify({event: obj.event, payload: {opponentName: opponentObj.user, opponentId: targetClient.id, status: 0, msg: 'Success'}}));
             }
             break;
@@ -92,6 +91,11 @@ const routeEvent = (message:any, ws:any) => {
         case 'refreshInvite': {
             ws.send(JSON.stringify({event: obj.event, payload: {id: ws.id, clients: CLIENTS, status: 0, msg: 'Success'}}));
             break;
+        }
+
+        case 'startGame': {
+            ws.send({}); //send to one guy
+            ws.send({}); //send to other guy
         }
             
         default:

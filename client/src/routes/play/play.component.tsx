@@ -5,10 +5,9 @@ import { useEffect, useState } from 'react';
 import { SignIn } from '../../components/sign-in/sign-in.component';
 import { PlayerList } from '../../components/player-list/player-list.component';
 import {Invite} from '../../components/invite/invite.component'
-import { PlayField } from '../../components/play-field/game-field.component';
+import { PlayField } from '../../components/play-field/play-field.component';
 import { signIn, receiveInvite, updateUserList } from "../../redux/slices"
 import { useDispatch, useSelector } from "react-redux";
-import useWebSocket, {ReadyState} from 'react-use-websocket';
 import { wsConnection } from '../../ws_utils/ws-play-connection';
 import { wsSend } from '../../ws_utils/ws-play-connection';
 import './play.styles.scss'
@@ -16,14 +15,13 @@ const appendLogs = (prevLogs:string, newLog:string) => {
     return prevLogs.concat('\n', newLog);
 }
 
-
- 
 export const Play = () => {
      
     const [logs, logsSet] = useState('');
     const dispatch = useDispatch();
     const users = useSelector((state:any) =>  {return state.users});
     const invite = useSelector((state:any) => {return state.invite})
+    const playSessionMeta = useSelector((state:any) => {return state.playSessionMeta});
     console.log('play rerender ', users);
  
     wsConnection.onerror = (error:any) => {
@@ -39,7 +37,7 @@ export const Play = () => {
                     break;
                 }
                 case 'invite': {
-                     dispatch(receiveInvite({opponentName: msgJSON.payload.opponentName, opponentId: msgJSON.payload.opponendId}));
+                     dispatch(receiveInvite({opponentName: msgJSON.payload.opponentName, opponentId: msgJSON.payload.opponentId}));
                      break;
                 }
                 case 'refreshInvite': {
@@ -47,9 +45,14 @@ export const Play = () => {
                     break;
                 }
                 case 'keepAlive': {
-                    console.log('sending keepalive');
                     wsSend(JSON.stringify({event:"keepalive", payload: {isAlive: true}}));
                     break;
+                }
+
+                case 'startGame': {
+                    console.log('startgame');
+                    break;
+
                 }
 
                 default: {
@@ -68,7 +71,7 @@ export const Play = () => {
         const handleAccept = (event:any) => {
         console.log('accept')
     }
-    //{ isShown: false, opponentName: null, opponentId: null},
+
     return(
          
             <div className='play-block'>
